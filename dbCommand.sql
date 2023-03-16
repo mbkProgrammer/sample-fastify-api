@@ -44,3 +44,17 @@ INSERT INTO posts (title, content, category_id, image, author, created_at) VALUE
   "athor",
   CURRENT_TIMESTAMP
 );
+
+-- CREATE users table
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(63),
+  email VARCHAR(63),
+  password VARCHAR(255),
+  address JSONB,
+  is_admin BOOLEAN DEFAULT false,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- GET all user
+SELECT * FROM users;
