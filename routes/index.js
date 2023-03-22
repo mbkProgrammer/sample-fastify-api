@@ -3,7 +3,11 @@ const accessTokenController = require('../controllers/accessTokenController');
 const signUpController = require('../controllers/signUpController');
 const signUpSchema = require('../schemas/signupSchema');
 const loginSchema = require('../schemas/loginSchema');
+const forgotPassSchema = require('../schemas/forgotPassSchema');
+const resetPassSchema = require('../schemas/resetPassSchema');
 const loginController = require('../controllers/loginController');
+const forgotController = require('../controllers/forgetController');
+const resetPasswordController = require('../controllers/resetPasswordController');
 
 const routes = async (fastify) => {
   // Declare a route
@@ -26,6 +30,12 @@ const routes = async (fastify) => {
 
   // route for protected
   fastify.get('/users/accessToken', accessTokenController);
+
+  // route for forgot password
+  fastify.post('/users/forget', { schema: forgotPassSchema }, forgotController);
+
+  // route for reset password
+  fastify.post('/users/reset', { schema: resetPassSchema }, resetPasswordController);
 };
 
 module.exports = routes;

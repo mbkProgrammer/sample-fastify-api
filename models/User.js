@@ -37,14 +37,55 @@ const User = db.define('User', {
     allowNull: false,
     defaultValue: DataTypes.NOW,
   },
+  forgot_token: {
+    type: DataTypes.TEXT,
+  },
 }, {
   timestamps: false,
   tableName: 'users',
 });
 
+User.createForgotToken = ({ userId, email }) => {
+  const expiresIn = '1h'; // Token expires in 1 day
+  const secret = process.env.SECRET_FORGOT_KEY; // Replace with your own secret key
+
+  const token = jwt.sign(
+    {
+      userId,
+      email,
+
+    },
+    secret,
+    { expiresIn },
+  );
+
+  return token;
+};
+
+User.validateForgotToken = async (forgotToken) => {
+  const secret = process.env.SECRET_FORGOT_KEY;
+  try {
+    const decoded = jwt.verify(forgotToken, secret);
+    const user = await User.findOne({
+      where: {
+        id: decoded.userId,
+        email: decoded.email,
+        forgot_token: forgotToken,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+    return user;
+  } catch (error) {
+    return null;
+  }
+};
+
 User.createToken = (user) => {
   const expiresIn = '7d'; // Token expires in 1 day
-  const secret = '26pS+a4ClqmHOKyPYVF6Go2RZexJdN3uNteAc+RTxjNZ51DTY2c84rggUrvcjQ+A'; // Replace with your own secret key
+  const secret = process.env.SECRET_KEY; // Replace with your own secret key
 
   // Create a new JWT token
   const token = jwt.sign(
@@ -61,7 +102,7 @@ User.createToken = (user) => {
 };
 
 User.validateAccessToken = async (accessToken) => {
-  const secret = '26pS+a4ClqmHOKyPYVF6Go2RZexJdN3uNteAc+RTxjNZ51DTY2c84rggUrvcjQ+A';
+  const secret = process.env.SECRET_KEY;
   try {
     const decoded = jwt.verify(accessToken, secret);
     const user = await User.findOne({

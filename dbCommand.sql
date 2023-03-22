@@ -58,3 +58,8 @@ CREATE TABLE users (
 
 -- GET all user
 SELECT * FROM users;
+
+-- Add forgot token to table
+ALTER TABLE users
+ADD COLUMN forgot_token TEXT;
+

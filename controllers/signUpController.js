@@ -1,6 +1,6 @@
 const User = require('../models/User');
-const signUpSchema = require('../schemas/signupSchema');
 const throwError = require('../utils/errorHandler');
+const sendEmail = require('../utils/sendEmail');
 
 const signUpController = async (req, res) => {
   const { email, name, password } = req.body;
@@ -22,6 +22,12 @@ const signUpController = async (req, res) => {
     password: await User.encryptPassword(password),
   });
   const token = await User.createToken(user);
+
+  await sendEmail({
+    to: user.email,
+    subject: 'Welcome to mbkProgrammer Blog',
+    html: `<h1>Hi ${user.name} </h1></br> <p>Thanks for see my blog</p>`,
+  });
 
   res.header('accessToken', token);
 
