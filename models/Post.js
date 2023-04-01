@@ -1,7 +1,8 @@
 const { Sequelize, Model, DataTypes } = require('sequelize');
-const db = require('../configs/db');
+const sequelize = require('../configs/db');
+// const Category = require('./Category');
 
-const Post = db.define('Post', {
+const Post = sequelize.define('Post', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -24,10 +25,30 @@ const Post = db.define('Post', {
   },
   created_at: {
     type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
   },
 }, {
   tableName: 'posts',
   timestamps: false,
 });
 
-module.exports = Post;
+const Category = sequelize.define('Category', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  timestamps: false,
+  tableName: 'categories',
+});
+
+Category.hasMany(Post, { foreignKey: 'category_id' });
+Post.belongsTo(Category, { foreignKey: 'category_id' });
+
+module.exports = { Post, Category };

@@ -1,4 +1,6 @@
-const { getAllPostsController, getSinglePostController, searchPostController } = require('../controllers/postsController');
+const {
+  getAllPostsController, getSinglePostController, searchPostController, getPostByCategoryController,
+} = require('../controllers/postsController');
 const accessTokenController = require('../controllers/accessTokenController');
 const signUpController = require('../controllers/signUpController');
 const signUpSchema = require('../schemas/signupSchema');
@@ -8,6 +10,10 @@ const resetPassSchema = require('../schemas/resetPassSchema');
 const loginController = require('../controllers/loginController');
 const forgotController = require('../controllers/forgetController');
 const resetPasswordController = require('../controllers/resetPasswordController');
+const createPostController = require('../controllers/createPostController');
+const upload = require('../middleware/upload');
+const resizeImage = require('../middleware/resizeImage');
+const getAllCategoryController = require('../controllers/getAllCategoryController');
 
 const routes = async (fastify) => {
   // Declare a route
@@ -16,11 +22,17 @@ const routes = async (fastify) => {
   // route get all post
   fastify.get('/posts/getAllPosts/', getAllPostsController);
 
+  // route get Post by category
+  fastify.get('/posts/getPostByCategory/', getPostByCategoryController);
+
   // route get one post
   fastify.get('/posts/getSinglePost/:id', getSinglePostController);
 
   // route search posts
   fastify.get('/posts/searchPosts', searchPostController);
+
+  // route for create Post
+  fastify.post('/posts/create', { preHandler: [upload.single('image'), resizeImage] }, createPostController);
 
   // route for signUp user
   fastify.post('/users/signup', { schema: signUpSchema }, signUpController);
@@ -36,6 +48,9 @@ const routes = async (fastify) => {
 
   // route for reset password
   fastify.post('/users/reset', { schema: resetPassSchema }, resetPasswordController);
+
+  // route for get all category
+  fastify.get('/category/getAllCategory', getAllCategoryController);
 };
 
 module.exports = routes;

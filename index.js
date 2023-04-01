@@ -4,11 +4,13 @@ const fastify = require('fastify')({ logger: true });
 const fastifySession = require('@fastify/session');
 const fastifyCookie = require('@fastify/cookie');
 const fastifyResponseValidation = require('@fastify/response-validation');
+const multer = require('fastify-multer');
 const router = require('./routes/index');
 
 fastify.register(fastifyCookie);
 fastify.register(fastifySession, { secret: process.env.SECRET_KEY });
 fastify.register(fastifyResponseValidation);
+fastify.register(multer.contentParser);
 
 // error handler
 

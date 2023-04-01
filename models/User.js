@@ -1,11 +1,11 @@
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const db = require('../configs/db');
+const sequelize = require('../configs/db');
 
 // const secretKey = process.env.SECRET_KEY;
 
-const User = db.define('User', {
+const User = sequelize.define('User', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

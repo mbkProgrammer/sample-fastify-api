@@ -1,12 +1,11 @@
-const data = require('../posts.json');
+const data = require('../category.json');
+const Category = require('../models/Category');
 const Post = require('../models/Post');
 
 const importToDatabase = () => {
   data.forEach((post) => {
-    Post.create({
-      ...post,
-      created_at: new Date(post.created_at).getTime(),
-      tech_id: post.category_id,
+    Category.create({
+      name: post.name,
     });
   });
 };

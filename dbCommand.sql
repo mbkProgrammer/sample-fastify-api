@@ -63,3 +63,9 @@ SELECT * FROM users;
 ALTER TABLE users
 ADD COLUMN forgot_token TEXT;
 
+
+-- Create categories table
+CREATE TABLE categories (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);

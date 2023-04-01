@@ -1,2 +1,4 @@
 node_modules
 variable.env
+public/posts/*
+tmp/*
